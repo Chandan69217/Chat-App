@@ -25,6 +25,10 @@ android {
             )
         }
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -40,4 +44,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+          // this for screen scalable of different android devices
+    implementation("com.intuit.ssp:ssp-android:1.1.1")
+    implementation("com.intuit.sdp:sdp-android:1.1.1")
+         // this one for rounded image
+    implementation("com.makeramen:roundedimageview:2.3.0")
 }
