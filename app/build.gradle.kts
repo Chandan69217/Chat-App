@@ -1,5 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
+  //  alias(libs.plugins.android.application)
+  //  alias(libs.plugins.google.gms.google.services)
+    id("com.android.application")
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -12,7 +16,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,4 +54,12 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.1")
          // this one for rounded image
     implementation("com.makeramen:roundedimageview:2.3.0")
+
+                        //Firebase Dependency
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation(libs.firebase.messaging)
+                        // MultiDex dependency
+    implementation("androidx.multidex:multidex:2.0.1")
+
 }

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.chandan.chats" />
+                  <option name="mobileSdkAppId" value="1:198319446970:android:a931bc2df3ece324181b83" />
+                  <option name="projectId" value="chats-34771" />
+                  <option name="projectNumber" value="198319446970" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

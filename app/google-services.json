@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198319446970",
+    "project_id": "chats-34771",
+    "storage_bucket": "chats-34771.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198319446970:android:a931bc2df3ece324181b83",
+        "android_client_info": {
+          "package_name": "com.chandan.chats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPntZ2K68aN3lVPZomG4quRWm5_NT1L20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
