@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        EdgeToEdge.enable(this);
+       // EdgeToEdge.enable(this);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
