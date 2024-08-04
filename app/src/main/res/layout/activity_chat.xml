@@ -49,26 +49,62 @@
         app:layout_constraintTop_toTopOf="parent"
         android:scaleType="centerCrop"
         app:riv_oval="true"/>
-    
-    <TextView
-        android:id="@+id/textName"
+    <LinearLayout
+        android:id="@+id/statusLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintEnd_toStartOf="@id/imageInfo"
-        app:layout_constraintTop_toTopOf="@id/profileImage"
+        app:layout_constraintTop_toTopOf="@+id/profileImage"
         app:layout_constraintBottom_toBottomOf="@id/profileImage"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
-        android:layout_marginLeft="@dimen/_8sdp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginRight="@dimen/_8sdp"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="@dimen/_4sdp"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:paddingStart="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_4sdp"
+            android:ems="12" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/_8ssp"
+            android:layout_marginLeft="@dimen/_8ssp"
+            android:paddingStart="@dimen/_4sdp">
+
+            <TextView
+                android:id="@+id/textAvailability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/secondary_text"/>
+            <View
+                android:id="@+id/viewAvailability"
+                android:layout_width="@dimen/_6ssp"
+                android:layout_height="@dimen/_6ssp"
+                android:background="@drawable/background_availability_shape"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageInfo"
@@ -88,7 +124,7 @@
         android:layout_height="1dp"
         android:background="@color/primary"
         android:layout_marginTop="@dimen/_12sdp"
-        app:layout_constraintTop_toBottomOf="@id/textName"/>
+        app:layout_constraintTop_toBottomOf="@id/statusLayout"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
@@ -111,8 +147,7 @@
         app:layout_constraintTop_toTopOf="@id/viewBackground"
         app:layout_constraintBottom_toBottomOf="@id/viewBackground"
         app:layout_constraintLeft_toLeftOf="@id/viewBackground"
-        app:layout_constraintRight_toRightOf="@id/viewBackground"
-        android:visibility="gone"/>
+        app:layout_constraintRight_toRightOf="@id/viewBackground"/>
 
     <FrameLayout
         android:id="@+id/sendLayout"
@@ -136,7 +171,8 @@
     <EditText
         android:id="@+id/inputMessage"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_40sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sendLayout"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,8 +187,10 @@
         android:hint="@string/type_a_message"
         android:textColorHint="@color/secondary_text"
         android:textColor="@color/white"
-        android:importantForAutofill="no"
+        android:importantForAutofill="yes"
         android:imeOptions="actionDone"
-        android:inputType="text"/>
+        android:inputType="textMultiLine"
+        android:minLines="1"
+        android:maxLines="3"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
