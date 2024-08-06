@@ -6,8 +6,10 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,6 +20,8 @@ import com.chandan.chats.adapters.ChatAdapter;
 import com.chandan.chats.databinding.ActivityChatBinding;
 import com.chandan.chats.model.ChatMessage;
 import com.chandan.chats.model.User;
+import com.chandan.chats.network.ApiClient;
+import com.chandan.chats.network.ApiService;
 import com.chandan.chats.utilities.Constants;
 import com.chandan.chats.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +32,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +44,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends BaseActivity {
 
@@ -111,6 +123,45 @@ public class ChatActivity extends BaseActivity {
             }
     });
 
+    private void showToast(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendNotification(String messageBody){
+        ApiClient.getApiClient().create(ApiService.class).sendMessage(
+               Constants.getRemoteMsgHeaders(),
+               messageBody
+        ).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if(response.isSuccessful()){
+                        try{
+                            if(response.body() != null){
+                                JSONObject responseJson = new JSONObject(response.body());
+                                JSONArray result = responseJson.getJSONArray("results");
+                                if(responseJson.getInt("failure") == 1){
+                                    JSONObject error = (JSONObject) result.get(0);
+                                    showToast(error.getString("error"));
+                                }
+
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                        showToast("Notification send successfully");
+                    }else{
+                        showToast("error: " + response.code());
+                    }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call,@NonNull Throwable t) {
+                showToast(t.getMessage());
+
+            }
+        });
+    }
+
     private void sendMessage(){
         HashMap<String,Object> message = new HashMap<>();
         message.put(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
@@ -131,6 +182,28 @@ public class ChatActivity extends BaseActivity {
             conversation.put(Constants.KEY_LAST_MESSAGE,binding.inputMessage.getText().toString());
             conversation.put(Constants.KEY_TIMESTAMP,new Date());
             addConversation(conversation);
+        }
+
+        if(!isReceiverAvailable){
+            try{
+                JSONArray tokens = new JSONArray();
+                tokens.put(userReceived.token);
+
+                JSONObject data = new JSONObject();
+                data.put(Constants.KEY_USER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
+                data.put(Constants.KEY_NAME,preferenceManager.getString(Constants.KEY_NAME));
+                data.put(Constants.KEY_FCM_TOKEN,preferenceManager.getString(Constants.KEY_FCM_TOKEN));
+                data.put(Constants.KEY_MESSAGE,binding.inputMessage.getText().toString());
+
+                JSONObject body = new JSONObject();
+                body.put(Constants.REMOTE_MSG_DATA,data);
+                body.put(Constants.REMOTE_MSG_REGISTRATION_IDS,tokens);
+
+                sendNotification(body.toString());
+
+            }catch (Exception exception){
+                showToast(exception.getMessage());
+            }
         }
         binding.inputMessage.setText(null);
     }
@@ -156,6 +229,12 @@ public class ChatActivity extends BaseActivity {
                                 binding.viewAvailability.setVisibility(View.INVISIBLE);
                             }
                         }
+                        userReceived.token = value.getString(Constants.KEY_FCM_TOKEN);
+                        if(userReceived.image == null){
+                            userReceived.image = value.getString(Constants.KEY_IMAGE);
+                            chatAdapter.setUserProfile(getUserProfile(userReceived.image));
+                            chatAdapter.notifyItemRangeChanged(0,chatMessage.size());
+                        }
                     }
                 });
 
@@ -176,8 +255,12 @@ public class ChatActivity extends BaseActivity {
     }
 
     private Bitmap getUserProfile(String encodedImage){
-        byte[] bytes = Base64.decode(encodedImage,Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        if(encodedImage != null){
+            byte[] bytes = Base64.decode(encodedImage,Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        }else{
+            return null;
+        }
     }
 
     private String getReadableDateTime(Date date){

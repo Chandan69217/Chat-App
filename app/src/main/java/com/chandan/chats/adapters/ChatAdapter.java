@@ -15,7 +15,7 @@ import com.chandan.chats.model.ChatMessage;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-     private final Bitmap userProfile;
+     private  Bitmap userProfile;
      private final List<ChatMessage> chats;
      private final String senderID;
      public static final int VIEW_TYPE_SEND = 1;
@@ -25,6 +25,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.userProfile = userProfile;
         this.chats = chats;
         this.senderID = senderID;
+    }
+
+    public void setUserProfile(Bitmap bitmap){
+        if(bitmap != null)
+        this.userProfile = bitmap;
     }
 
     @NonNull
@@ -83,6 +88,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setData(ChatMessage chatMessage,Bitmap userProfile){
             binding.textMessage.setText(chatMessage.message);
             binding.textDateTime.setText(chatMessage.dateTime);
+            if(userProfile !=null)
             binding.profileImage.setImageBitmap(userProfile);
         }
 
